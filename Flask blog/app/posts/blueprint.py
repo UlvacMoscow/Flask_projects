@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import render_template
 
 from models import Post, Tag
+from flask import request
 
 """ первый параметр имя,
 #второе путь текeotuj файла, по которому flask будет отталкиваться,
@@ -10,9 +11,16 @@ from models import Post, Tag
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
+
 @posts.route('/')
 def index():
-    posts = Post.query.all() #записал список постов в переменную post
+
+    field_query = request.args.get('field_query')
+
+    if field_query:
+        posts = Post.query.filter(Post.title.contains(field_query) | Post.body.contains(field_query)).all()
+    else:
+        posts = Post.query.all() #записал список постов в переменную post
     return render_template('posts/index.html', posts=posts) #передал список постов в index.html
 
 #получаем урл на пост
