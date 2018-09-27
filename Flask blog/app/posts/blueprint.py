@@ -3,6 +3,7 @@ from flask import render_template
 
 from models import Post, Tag
 from flask import request
+from .forms import PostForm
 
 """ первый параметр имя,
 #второе путь текeotuj файла, по которому flask будет отталкиваться,
@@ -10,6 +11,12 @@ from flask import request
 """
 
 posts = Blueprint('posts', __name__, template_folder='templates')
+
+#http://localhost/blog/create
+@posts.route('/create')
+def create_post():
+    form = PostForm()
+    return render_template('posts/create_post.html', form=form)
 
 
 @posts.route('/')
