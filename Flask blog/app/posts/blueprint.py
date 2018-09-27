@@ -45,7 +45,7 @@ def index():
     if field_query:
         posts = Post.query.filter(Post.title.contains(field_query) | Post.body.contains(field_query)).all()
     else:
-        posts = Post.query.all() #записал список постов в переменную post
+        posts = Post.query.order_by(Post.created.desc()) #записал список постов в переменную post
     return render_template('posts/index.html', posts=posts) #передал список постов в index.html
 
 #получаем урл на пост
