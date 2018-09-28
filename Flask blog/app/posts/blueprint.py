@@ -42,6 +42,10 @@ def index():
 
     field_query = request.args.get('field_query')
 
+    page = request.args.get('page')
+
+    
+
     if field_query:
         posts = Post.query.filter(Post.title.contains(field_query) | Post.body.contains(field_query)).all()
     else:
