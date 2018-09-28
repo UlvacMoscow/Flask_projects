@@ -25,14 +25,19 @@
                 <a class="page-link" href="./?page={{ pages.prev_num }}">Previous</a>
             </li>
 
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item active">
-                <span class="page-link">
-                    2
+            {% for page in pages.iter_pages() %}
+
+            <li {% if page == pages.page%} class="page-item active" {% endif %}>
+
+                <a class="page-link" href="./?page={{ page }}">
+                    {{ page }}
                     <span class="sr-only">(current)</span>
-                </span>
+                </a>
+
             </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+
+            {% endfor %}
+
 
             <li {% if not pages.has_next %} class="page-item disabled" {% endif %}>
                 <a class="page-link" href="./?page={{ pages.next_num }}">Next</a>
