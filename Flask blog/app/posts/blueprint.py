@@ -44,13 +44,19 @@ def index():
 
     page = request.args.get('page')
 
-    
+    if page and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
 
     if field_query:
-        posts = Post.query.filter(Post.title.contains(field_query) | Post.body.contains(field_query)).all()
+        posts = Post.query.filter(Post.title.contains(field_query) | Post.body.contains(field_query)) #.all()
     else:
         posts = Post.query.order_by(Post.created.desc()) #записал список постов в переменную post
-    return render_template('posts/index.html', posts=posts) #передал список постов в index.html
+
+    pages = posts.paginate(page=page, per_page=5)
+
+    return render_template('posts/index.html', posts=posts, pages=pages) #передал список постов в index.html
 
 #получаем урл на пост
 @posts.route('/<slug>')
