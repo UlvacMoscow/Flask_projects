@@ -49,7 +49,7 @@ def edit_post(slug):
         return redirect(url_for(posts.post_detail, slug=post.slug))
 
     form = PostForm(obj=post)
-    return render_template('posts/edit.html', post=post, form=form)
+    return render_template('posts/edit_post.html', post=post, form=form)
 
 
 @posts.route('/')
