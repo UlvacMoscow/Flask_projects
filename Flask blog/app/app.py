@@ -8,6 +8,8 @@ from flask_script import Manager
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
+from flask_security import SQLAlchemyUserDatastore, Security
+
 
 app = Flask(__name__) #__name__ это имя теукщего файла app.py (необходимо указывать это отталкивающая точка)
 app.config.from_object(Configuration)
@@ -23,3 +25,8 @@ from models import *
 admin = Admin(app)
 admin.add_view(ModelView(Post, db.session()))
 admin.add_view(ModelView(Tag, db.session()))
+
+###flask_security
+
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
