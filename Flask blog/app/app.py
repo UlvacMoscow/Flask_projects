@@ -6,10 +6,12 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
 from flask_admin import Admin
+from flask_admin import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 
 from flask_security import SQLAlchemyUserDatastore, Security
 from flask_security import current_user
+
 from flask import redirect, url_for, request
 
 
@@ -25,15 +27,23 @@ manager.add_command('db', MigrateCommand)
 ### Admin ###
 from models import *
 
-class AdminView(ModelView):
+class AdminMixin:
     def is_accessible(self):
         return current_user.has_role('admin')
 
-    def inaccessible_callback(self, **kwargs):
+    def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for('security.login', next=request.url ))
 
 
-admin = Admin(app)
+class AdminView(AdminMixin, ModelView):
+    pass
+
+
+class HomeAdminView(AdminMixin, AdminIndexView):
+    pass
+
+
+admin = Admin(app, 'FlasApp', url='/', index_view=HomeAdminView(name='Home'))
 admin.add_view(AdminView(Post, db.session()))
 admin.add_view(AdminView(Tag, db.session()))
 
