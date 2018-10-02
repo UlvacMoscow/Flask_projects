@@ -43,7 +43,7 @@ def create_post():
 @posts.route('/<slug>/edit/', methods=['POST', 'GET'])
 @login_required
 def edit_post(slug):
-    post = Post.query.filter(Post.slug==slug).first()
+    post = Post.query.filter(Post.slug==slug).first_or_404()
 
     if request.method == 'POST':
         form = PostForm(formdata=request.form, obj=post)
@@ -80,7 +80,7 @@ def index():
 #получаем урл на пост
 @posts.route('/<slug>')
 def post_detail(slug):
-    post = Post.query.filter(Post.slug == slug).first() #ищем уникальный пост по slug
+    post = Post.query.filter(Post.slug == slug).first_or_404() #ищем уникальный пост по slug
     tags = post.tags
     return render_template('posts/post_detail.html', post=post, tags=tags) #передаем post в шаблон post_detail.html
 
@@ -88,6 +88,6 @@ def post_detail(slug):
 #http://localhost/blog/tag/python
 @posts.route('/tag/<slug>')
 def tag_detail(slug):
-    tag = Tag.query.filter(Tag.slug==slug).first()
+    tag = Tag.query.filter(Tag.slug==slug).first_or_404()
     posts = tag.posts.all()
     return render_template('posts/tag_detail.html', tag=tag, posts=posts)
